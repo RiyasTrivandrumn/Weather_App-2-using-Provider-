@@ -1,16 +1,18 @@
-List<String> baground = [
-  "assets/img/clouds.jpg",
-  "assets/img/thunder.jpg",
-  "assets/img/clear.jpg",
-  "assets/img/drizzle.jpg"
-];
+Map<String,dynamic>background = {
+ "Clouds" :"assets/img/clouds.jpg",
+ "Thunder": "assets/img/thunder.jpg",
+  "Clear": "assets/img/clear.jpg",
+  "Rain": "assets/img/rain.jpg",
+  "Drizzle": "assets/img/rain.jpg"
+};
 
-List<String> widget_image = [
-  "assets/img/clear.png",
-  "assets/img/clouds.png",
-  "assets/img/drizzle.png",
-  "assets/img/few-clouds.png",
-  "assets/img/mist.png",
-  "assets/img/snow.png",
-  "assets/img/cloud-lightning.png"
-];
+Map<String,dynamic> imagePath= {
+ "Clear": "assets/img/clear.png",
+  "Clouds" :"assets/img/clouds.png",
+  "Drizzle":"assets/img/drizzle.png",
+  "Few_clouds":"assets/img/few-clouds.png",
+  "Mist":"assets/img/mist.png",
+  "Snow":"assets/img/snow.png",
+  "Cloud":"assets/img/cloud-lightning.png",
+  "Rain":"assets/img/rain.png"
+};

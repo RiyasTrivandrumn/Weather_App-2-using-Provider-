@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:weather_app_2_provider/data/image_path.dart';
 import 'package:weather_app_2_provider/services/location_provider.dart';
@@ -15,8 +16,26 @@ class _HomePageState extends State<HomePage> {
 
 @override
   void initState() {
-    Provider.of<LocationProvider>(context,listen: false).determinePosition();
-    Provider.of<WeatherServiceProvider>(context,listen: false).fetchWeatherDataByCity("Dubai");
+    final locationProvider= Provider.of<LocationProvider>(context,listen: false);
+    locationProvider.determinePosition().then((_) {
+    if(locationProvider.currentLocationName!= null){
+      var city=locationProvider.currentLocationName!.locality;
+
+      if(city != null){
+        Provider.of<WeatherServiceProvider>(context,listen: false).fetchWeatherDataByCity(city);
+      }
+
+    }
+
+
+
+    });
+
+
+    // Provider.of<LocationProvider>(context,listen: false).determinePosition();
+    // Provider.of<WeatherServiceProvider>(context,listen: false).fetchWeatherDataByCity("Dubai");
+
+
     super.initState();
   }
 
@@ -27,7 +46,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 final locationProvider=Provider.of<LocationProvider>(context);  //location providers object creation
- 
+ final weatherProvider=Provider.of<WeatherServiceProvider>(context);
 
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -39,7 +58,7 @@ final locationProvider=Provider.of<LocationProvider>(context);  //location provi
         width: size.width,
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage(baground[0]), fit: BoxFit.cover)),
+                image: AssetImage(background[weatherProvider.weather!.weather![0].main??"N/A "]??"assets/img/default.jpg"), fit: BoxFit.cover)),
         child: Stack(
           children: [
             _clicked == true?
@@ -130,7 +149,7 @@ final locationProvider=Provider.of<LocationProvider>(context);  //location provi
             ),
             Align(
                 alignment: Alignment(0, -0.7),
-                child: Image.asset(widget_image[2])),
+                child: Image.asset(imagePath[weatherProvider.weather!.weather![0].main??"N/A "]??"assets/img/default.jpg")),
             Align(
               alignment: Alignment(0, 0),
               child: Container(
@@ -140,21 +159,22 @@ final locationProvider=Provider.of<LocationProvider>(context);  //location provi
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "29°C",
+                      "${weatherProvider.weather!.main!.temp?.toStringAsFixed(0)}" + "°C",
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 28),
                     ),
+                    
                     Text(
-                      "Cloudy",
+                      weatherProvider.weather!.weather![0].main.toString(),
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
                           fontSize: 25),
                     ),
                     Text(
-                      DateTime.now().toString(),
+                      DateFormat("h:mm a").format(DateTime.now()),
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -182,7 +202,7 @@ final locationProvider=Provider.of<LocationProvider>(context);  //location provi
                           Column(
                             children: [
                               Text("Temp Max",style:TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w600),),
-                               Text("29°C",style:TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w600),)
+                               Text("${weatherProvider.weather!.main!.tempMax!.toStringAsFixed(0)}°C",style:TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w600),)
                               
                             ],
                           )],
@@ -198,7 +218,7 @@ final locationProvider=Provider.of<LocationProvider>(context);  //location provi
                           Column(
                             children: [
                               Text("Temp Min",style:TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w600),),
-                               Text("29°C",style:TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w600),)
+                               Text("${weatherProvider.weather!.main!.tempMin!.toStringAsFixed(0)}°C",style:TextStyle(color: Colors.white,fontSize: 14,fontWeight: FontWeight.w600),)
                               
                             ],
                           )],
